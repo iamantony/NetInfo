@@ -3,6 +3,8 @@ package com.iamantony.netinfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 import android.content.Context;
 import android.telephony.TelephonyManager;
 import android.telephony.CellInfo;
@@ -13,25 +15,52 @@ import android.telephony.cdma.CdmaCellLocation;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Switch;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener
 {
     public static final String TAG = "NetInfo";
 
-    TelephonyManager m_telManager = null;
-    Button m_refreshButton = null;
-    TextView m_textView = null;
-    int counter = 1;
+    private TelephonyManager m_telManager = null;
+    private Button m_refreshButton = null;
+    private Switch m_autoRefSwitch = null;
+    private TextView m_textView = null;
+    private Timer m_timer = null;
+    private MyTimerTask m_myTimerTask = null;
+    private int counter = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        m_telManager =  (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
-        m_refreshButton = (Button)findViewById(R.id.button);
+        m_telManager = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
+        m_refreshButton = (Button)findViewById(R.id.refrBtn);
         m_refreshButton.setOnClickListener(MainActivity.this);
+
+        m_autoRefSwitch = (Switch)findViewById(R.id.autoRefSw);
+        m_autoRefSwitch.setChecked(false);
+        m_autoRefSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener()
+        {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                m_refreshButton.setEnabled(!isChecked);
+
+                if (m_timer != null)
+                {
+                    m_timer.cancel();
+                    m_timer = null;
+                }
+                else
+                {
+                    m_timer = new Timer();
+                    m_myTimerTask = new MyTimerTask();
+                    m_timer.schedule(m_myTimerTask, 1000, 5000);
+                }
+            }
+        });
 
         m_textView = (TextView)findViewById(R.id.textView);
 
@@ -165,6 +194,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (m_textView != null)
         {
             m_textView.setText(telephonyInfo.toString());
+        }
+    }
+
+    class MyTimerTask extends TimerTask
+    {
+        @Override
+        public void run()
+        {
+            runOnUiThread(new Runnable()
+            {
+                @Override
+                public void run()
+                {
+                    CollectInfo();
+                }
+            });
         }
     }
 }
