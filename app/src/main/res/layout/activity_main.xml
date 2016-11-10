@@ -10,20 +10,33 @@
     tools:context="com.iamantony.netinfo.MainActivity">
 
     <Button
+        android:id="@+id/refreshButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Refresh"
-        android:id="@+id/refrBtn"
-        android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
+        android:text="@string/refresh"
         android:longClickable="false" />
+
+    <Switch
+        android:id="@+id/autoRefSwitch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/scrollView"
+        android:layout_alignEnd="@+id/scrollView"
+        android:text="@string/refreshSwitchText"/>
+
+    <include layout="@layout/current_cell_info"
+        android:id="@+id/cci_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/refreshButton"/>
 
     <ScrollView
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:id="@+id/scrollView"
-        android:layout_below="@+id/refrBtn"
+        android:layout_below="@+id/cci_layout"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" >
 
@@ -34,13 +47,5 @@
             android:textSize="18dp" />
     </ScrollView>
 
-    <Switch
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Auto\nRefresh"
-        android:id="@+id/autoRefSw"
-        android:layout_alignParentTop="true"
-        android:layout_alignRight="@+id/scrollView"
-        android:layout_alignEnd="@+id/scrollView"
-        android:layout_above="@+id/scrollView" />
+
 </RelativeLayout>

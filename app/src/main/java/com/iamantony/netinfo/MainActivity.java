@@ -37,10 +37,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
 
         m_telManager = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
-        m_refreshButton = (Button)findViewById(R.id.refrBtn);
+        m_refreshButton = (Button)findViewById(R.id.refreshButton);
         m_refreshButton.setOnClickListener(MainActivity.this);
 
-        m_autoRefSwitch = (Switch)findViewById(R.id.autoRefSw);
+        m_autoRefSwitch = (Switch)findViewById(R.id.autoRefSwitch);
         m_autoRefSwitch.setChecked(false);
         m_autoRefSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener()
         {
